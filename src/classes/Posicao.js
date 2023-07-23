@@ -13,4 +13,7 @@ export class Posicao {
     getCorDoTabuleiro(){
         return this.corDoTabuleiro;
     }
+    setCorDoTabuleiro(corDoTabuleiro){
+        this.corDoTabuleiro = corDoTabuleiro;
+    }
 }

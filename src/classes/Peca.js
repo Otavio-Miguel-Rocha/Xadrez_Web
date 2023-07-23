@@ -6,4 +6,5 @@ export class Peca {
     getCor(){
       return this.cor;
     }
+
 }
