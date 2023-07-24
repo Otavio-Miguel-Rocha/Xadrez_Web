@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChessBishop,
@@ -8,25 +9,14 @@ import {
   faChessRook,
 } from "@fortawesome/free-solid-svg-icons";
 
-
-
-const PosicaoComponent = ({ posicao,tabuleiro }) => {
+const PosicaoComponent = React.memo(({ posicao, tabuleiro, mostraOpcoesJogada }) => {
+  const [backgroundColor, setBackgroundColor] = useState(
+    posicao.getCorDoTabuleiro() === "Vermelho" ? "black" : posicao.getCorDoTabuleiro() === "Branco" ? "#043927" : "#00674b"
+  );
 
   const peca = posicao.getPeca();
   const corDaPeca = peca ? peca.getCor() : "";
-  const corDoTabuleiro = posicao.getCorDoTabuleiro();
 
-  //styles
-  let styleCorQuadradoTabuleiro = {}
-  if(posicao.getCorDoTabuleiro() === "Amarelo"){
-    styleCorQuadradoTabuleiro = {
-      backgroundColor: "#fde047",
-    };
-  } else{
-      styleCorQuadradoTabuleiro = {
-          backgroundColor: corDoTabuleiro === "Branco" ? "#043927" : "#00674b",
-        };
-    }
   const styleIconePeca = {
     color: corDaPeca === "Branco" ? "#ffffff" : "#000000",
   };
@@ -50,19 +40,19 @@ const PosicaoComponent = ({ posicao,tabuleiro }) => {
 
   return (
     <a
-      onClick={possiveisMovimentos}
+      onMouseOver={() => setBackgroundColor("gray")}
+      onMouseLeave={() => setBackgroundColor(posicao.getCorDoTabuleiro() === "Branco" ? "#043927" : "#00674b")}
+      onClick={() => chamaComponenteTabuleiro()}
       className="w-10 h-10 flex justify-center items-center cursor-pointer"
-      style={styleCorQuadradoTabuleiro}
+      style={{ backgroundColor }}
     >
       {iconePeca}
     </a>
   );
 
-  function possiveisMovimentos() {
-    let possiveisMovimentosDaPeca = peca.possiveisMovimentos(tabuleiro, posicao);
-    console.log(possiveisMovimentosDaPeca);
-    //Continuar a partir daqui...
+  function chamaComponenteTabuleiro() {
+    mostraOpcoesJogada(peca.possiveisMovimentos(tabuleiro, posicao));
   }
-};
+});
 
 export default PosicaoComponent;
