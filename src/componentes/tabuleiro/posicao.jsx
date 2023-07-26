@@ -9,9 +9,11 @@ import {
   faChessRook,
 } from "@fortawesome/free-solid-svg-icons";
 
-const PosicaoComponent = React.memo(({ posicao, tabuleiro, mostraOpcoesJogada }) => {
+const PosicaoComponent = React.memo(({ posicao, tabuleiro }) => {
+  //cor fundo
   const [backgroundColor, setBackgroundColor] = useState(
-    posicao.getCorDoTabuleiro() === "Vermelho" ? "black" : posicao.getCorDoTabuleiro() === "Branco" ? "#043927" : "#00674b"
+    posicao.getCorDoTabuleiro() === "Vermelho" ? "black" : 
+    posicao.getCorDoTabuleiro() === "Branco" ? "red" : "#00674b"
   );
 
   const peca = posicao.getPeca();
@@ -30,6 +32,10 @@ const PosicaoComponent = React.memo(({ posicao, tabuleiro, mostraOpcoesJogada })
     Rei: faChessKing,
   };
 
+  // useEffect(() => {
+    
+  // },[corDaPeca]);
+
   const iconePeca = peca ? (
     <FontAwesomeIcon
       icon={iconesPecas[peca.constructor.name]}
@@ -42,7 +48,7 @@ const PosicaoComponent = React.memo(({ posicao, tabuleiro, mostraOpcoesJogada })
     <a
       onMouseOver={() => setBackgroundColor("gray")}
       onMouseLeave={() => setBackgroundColor(posicao.getCorDoTabuleiro() === "Branco" ? "#043927" : "#00674b")}
-      onClick={() => chamaComponenteTabuleiro()}
+      onClick={() => possiveisMovimentosPeca()}
       className="w-10 h-10 flex justify-center items-center cursor-pointer"
       style={{ backgroundColor }}
     >
@@ -50,8 +56,18 @@ const PosicaoComponent = React.memo(({ posicao, tabuleiro, mostraOpcoesJogada })
     </a>
   );
 
-  function chamaComponenteTabuleiro() {
-    mostraOpcoesJogada(peca.possiveisMovimentos(tabuleiro, posicao));
+  function possiveisMovimentosPeca() {
+    let possiveisMovimentos = peca.possiveisMovimentos(tabuleiro, posicao);
+    let novasPosicoes = [];
+    tabuleiro.getPosicoes().forEach((posicao) => {
+        novasPosicoes.push(posicao);
+        for(let i = 0 ; i < possiveisMovimentos.length ; i++){
+            if(posicao.id === possiveisMovimentos[i].id){
+                posicao.setCorDoTabuleiro("Vermelho");
+            }
+        }
+      });
+    console.log(novasPosicoes);
   }
 });
 

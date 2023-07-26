@@ -1,12 +1,87 @@
 // TabuleiroComponent.jsx
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Tabuleiro } from "../../classes/Tabuleiro";
 import PosicaoComponent from "./posicao";
 
 const TabuleiroComponent = () => {
-  const tabuleiro = new Tabuleiro();
-  const [posicoes, setPosicoes] = useState(tabuleiro.getPosicoes());
+  const [posicoes, setPosicoes] = useState(setarPosicoes());
+
+  function setarPosicoes(){
+    let posicoes = [];
+    for(let i = 0 ; i < 64; i++){
+        posicoes.push(new Posicao(i, corDoTabuleiro(i, posicoes)));
+        if (i >= 8 && i <= 15) {
+            posicoes[i].setPeca(new Peao("Preto"));
+        }
+        if (i >= 48 && i <= 55) {
+            posicoes[i].setPeca(new Peao("Branco"));
+        }
+        //
+        //Torre
+        if (i == 0 || i == 7) {
+            posicoes[i].setPeca(new Torre("Preto"));
+        }
+        if (i == 56 || i == 63) {
+            posicoes[i].setPeca(new Torre("Branco"));
+        }
+        //
+        //Cavalo
+        if (i == 1 || i == 6) {
+            posicoes[i].setPeca(new Cavalo("Preto"));
+        }
+        if (i == 57 || i == 62) {
+            posicoes[i].setPeca(new Cavalo("Branco"));
+        }
+        //
+        //Bispo
+        if (i == 2 || i == 5) {
+            posicoes[i].setPeca(new Bispo("Preto"));
+        }
+        if (i == 58 || i == 61) {
+            posicoes[i].setPeca(new Bispo("Branco"));
+        }
+        //
+        //Rainha
+        if (i == 3) {
+            posicoes[i].setPeca(new Rainha("Preto"));
+        }
+        if (i == 59) {
+            posicoes[i].setPeca(new Rainha("Branco"));
+        }
+        //
+        //Rei
+        if (i == 4) {
+            posicoes[i].setPeca(new Rei("Preto"));
+        }
+        if (i == 60) {
+            posicoes[i].setPeca(new Rei("Branco"));
+        }
+        //
+    }
+    return posicoes;
+  }
+
+  function corDoTabuleiro(index, posicoes){
+    let corDoTabuleiro = "";
+    //define a cor do quadrado do tabuleiro
+    if(index < 8){
+        if(index % 2 == 0){
+            corDoTabuleiro = "Branco";
+        } else{
+            corDoTabuleiro = "Verde";
+        }
+    }
+    else{
+        let corAnterior = posicoes[index-8].getCorDoTabuleiro();
+        if(corAnterior == "Branco"){
+            corDoTabuleiro = "Verde";
+        } else{
+            corDoTabuleiro = "Branco";
+        }
+    }
+    return corDoTabuleiro
+  }
 
   return (
     <section className="w-screen h-screen bg-gray-600 flex justify-center items-center flex-col">
@@ -16,18 +91,6 @@ const TabuleiroComponent = () => {
             key={posicao.id}
             posicao={posicao}
             tabuleiro={tabuleiro}
-            mostraOpcoesJogada={(possiveisMovimentos) => {
-                let novasPosicoes = [];
-                tabuleiro.getPosicoes().forEach((posicao) => {
-                    novasPosicoes.push(posicao);
-                    for(let i = 0 ; i < possiveisMovimentos.length ; i++){
-                        if(posicao.id === possiveisMovimentos[i].id){
-                            posicao.setCorDoTabuleiro("Vermelho");
-                        }
-                    }
-                });
-                setPosicoes(novasPosicoes);
-            }}
           />
         ))}
       </div>
