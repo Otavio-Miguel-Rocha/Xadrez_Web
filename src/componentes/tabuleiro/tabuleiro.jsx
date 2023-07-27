@@ -10,26 +10,69 @@ import RainhaComponent from "../pecas/rainha";
 import ReiComponent from "../pecas/rei";
 
 
+const tabuleiro = [
+    [
+        'TP','CP','BP','REP','RAP','BP','CP','TP'
+    ],
+    [
+        'PP','PP','PP','PP','PP','PP','PP','PP'
+    ],
+    [
+        '','','','','','','',''
+    ],
+    [
+        '','','','','','','',''
+    ],
+    [
+        '','','','','','','',''
+    ],
+    [
+        '','','','','','','',''
+    ],
+    [
+        'PB','PB','PB','PB','PB','PB','PB','PB'
+    ],
+    [
+        'TB','CB','BB','RAB','REB','BB','CB','TB'
+    ],
+]
+tabuleiro[1][0]
+
 const TabuleiroComponent = () => {
-    
-    const [posicoes, setPosicoes] = useState(
-        Array.from({ length: 64 }, (_, i) => (
-            <PosicaoComponent 
-            key={i} 
-            backgroundColor={corNoTabuleiro(i)}
-            getPosicoesPosicaoComponent={getPosicoes}
-            >
-              {posicoesIniciaisDasPecas(i)}
-            </PosicaoComponent>
-        ))
-    );
+    const [posicoes, setPosicoes] = useState(tabuleiro);
+
+    const posicoes2 = tabuleiro.map((r, rowI) => r.map((c, colI) => {
+        console.log(c);
+        if (c === 'PP') {
+            return [<PeaoComponent row={rowI} col={colI} posicoes={tabuleiro} setPosicao={setPosicoes} color={"black"}/>]
+        } else {
+            return c;
+        }
+    })).reduce((currentR, nextR) => {
+        console.log('currentR', currentR);
+        console.log('nextR', nextR);
+        return currentR.concat(nextR);
+    },[]);
+    localStorage.setItem('tab', JSON.stringify(tabuleiro));
+    // const [posicoes, setPosicoes] = useState(
+    //     Array.from({ length: 64 }, (_, i) => (
+            // <PosicaoComponent 
+            // key={i} 
+            // backgroundColor={corNoTabuleiro(i)}
+            // getPosicoesPosicaoComponent={getPosicoes}
+            // >
+            //   {posicoesIniciaisDasPecas(i)}
+            // </PosicaoComponent>
+    //     ))
+    // );
+    console.log(posicoes)
 
     function getPosicoes(){
         return posicoes;
     }
   function posicoesIniciaisDasPecas(i){
         if (i >= 8 && i <= 15) {
-            return <PeaoComponent color={"black"}/>
+            return <PeaoComponent posicoes={tabuleiro} color={"black"}/>
         }
         if (i >= 48 && i <= 55) {
             return <PeaoComponent color={"white"}/>
@@ -90,8 +133,15 @@ const TabuleiroComponent = () => {
 
   return (
     <section className="w-screen h-screen bg-gray-600 flex justify-center items-center flex-col">
-      <div className="grid grid-cols-8 grid-rows-8">
-        {posicoes}
+      <div className="grid w-50 h-50 grid-cols-8 grid-rows-8">
+        {posicoes2.map((p, i) => {
+            return <PosicaoComponent 
+            key={i} 
+            backgroundColor={corNoTabuleiro(i)}
+            >
+              {p}
+            </PosicaoComponent>
+        })}
       </div>
     </section>
   );

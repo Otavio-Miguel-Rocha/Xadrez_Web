@@ -9,13 +9,22 @@ const PeaoComponent = React.memo((props) => {
     return(
         <>
         <FontAwesomeIcon
+        onClick={()=> teste()}
         icon={faChessPawn}
         size="xl"
         style={corPeca}/>  
         </>
     );
+    function teste(){
+      console.log(props);
+      const tabuleiro = props.posicoes;
+      tabuleiro[props.row][props.col] = '';
+      tabuleiro[props.row+1][props.col] = 'PP';
+      props.setPosicao(tabuleiro.slice());
+
+    }
     
-    function possiveisMovimentos(tabuleiro,posicaoAtual) {
+    function possiveisMovimentos(posicoes,posicaoAtual) {
         let possiveisMovimentos = [];
         const posicaoNoTabuleiro = tabuleiro.getPosicoes().indexOf(posicaoAtual);
       

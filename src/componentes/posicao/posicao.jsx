@@ -10,7 +10,6 @@ const PosicaoComponent = React.memo((props) => {
     <a
       onMouseOver={() => setBackgroundColor("gray")}
       onMouseOut={() => setBackgroundColor(corPosicao === "Dark" ? "#043927" : "#00674b")}
-      onClick={() => teste()}
       className="w-10 h-10 flex justify-center items-center cursor-pointer"
       style={{ backgroundColor }}
     >
