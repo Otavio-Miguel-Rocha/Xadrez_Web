@@ -1,98 +1,97 @@
-// TabuleiroComponent.jsx
-
 import { useState, useEffect } from "react";
-import { Tabuleiro } from "../../classes/Tabuleiro";
-import PosicaoComponent from "./posicao";
+import PosicaoComponent from "../posicao/posicao";
+
+//Importando as peças
+import PeaoComponent from "../pecas/peao";
+import TorreComponent from "../pecas/torre";
+import CavaloComponent from "../pecas/cavalo";
+import BispoComponent from "../pecas/bispo";
+import RainhaComponent from "../pecas/rainha";
+import ReiComponent from "../pecas/rei";
+import { getPosicoesTabuleiro, setPosicoesTabuleiro } from "../../service/tabuleiro-service";
 
 const TabuleiroComponent = () => {
-  const [posicoes, setPosicoes] = useState(setarPosicoes());
+    if(getPosicoesTabuleiro().length == 0) {
+        const posicoesTabuleiro = Array.from({ length: 64 }, (_, i) => (
+            <PosicaoComponent 
+            key={i} 
+            backgroundColor={corNoTabuleiro(i)
+            
+            }>
+              {posicoesIniciaisDasPecas(i)}
+            </PosicaoComponent>
+        ));
+        setPosicoesTabuleiro(posicoesTabuleiro);
+    }
 
-  function setarPosicoes(){
-    let posicoes = [];
-    for(let i = 0 ; i < 64; i++){
-        posicoes.push(new Posicao(i, corDoTabuleiro(i, posicoes)));
+    const [posicoes, setPosicoes] = useState(getPosicoesTabuleiro());
+
+
+  function posicoesIniciaisDasPecas(i){
         if (i >= 8 && i <= 15) {
-            posicoes[i].setPeca(new Peao("Preto"));
+            return <PeaoComponent  color={"black"}/>
         }
         if (i >= 48 && i <= 55) {
-            posicoes[i].setPeca(new Peao("Branco"));
+            return <PeaoComponent color={"white"}/>
         }
         //
         //Torre
         if (i == 0 || i == 7) {
-            posicoes[i].setPeca(new Torre("Preto"));
+            return <TorreComponent color={"black"}/>
         }
         if (i == 56 || i == 63) {
-            posicoes[i].setPeca(new Torre("Branco"));
+            return <TorreComponent color={"white"}/>
         }
         //
         //Cavalo
         if (i == 1 || i == 6) {
-            posicoes[i].setPeca(new Cavalo("Preto"));
+            return <CavaloComponent color={"black"}/>
         }
         if (i == 57 || i == 62) {
-            posicoes[i].setPeca(new Cavalo("Branco"));
+            return <CavaloComponent color={"white"}/>
         }
         //
         //Bispo
         if (i == 2 || i == 5) {
-            posicoes[i].setPeca(new Bispo("Preto"));
+            return <BispoComponent color={"black"}/>
         }
         if (i == 58 || i == 61) {
-            posicoes[i].setPeca(new Bispo("Branco"));
+            return <BispoComponent color={"white"}/>
         }
         //
         //Rainha
         if (i == 3) {
-            posicoes[i].setPeca(new Rainha("Preto"));
+            return <RainhaComponent color={"black"}/>
         }
         if (i == 59) {
-            posicoes[i].setPeca(new Rainha("Branco"));
+            return <RainhaComponent color={"white"}/>
         }
         //
         //Rei
         if (i == 4) {
-            posicoes[i].setPeca(new Rei("Preto"));
+            return <ReiComponent color={"black"}/>
         }
         if (i == 60) {
-            posicoes[i].setPeca(new Rei("Branco"));
+            return <ReiComponent color={"white"}/>
         }
         //
     }
-    return posicoes;
-  }
 
-  function corDoTabuleiro(index, posicoes){
-    let corDoTabuleiro = "";
-    //define a cor do quadrado do tabuleiro
-    if(index < 8){
-        if(index % 2 == 0){
-            corDoTabuleiro = "Branco";
-        } else{
-            corDoTabuleiro = "Verde";
+    function corNoTabuleiro(index) {
+        const linha = Math.floor(index / 8);
+        const coluna = index % 8;
+      
+        if (linha % 2 === 0) {
+          return coluna % 2 === 0 ? "Light" : "Dark";
+        } else {
+          return coluna % 2 === 0 ? "Dark" : "Light";
         }
     }
-    else{
-        let corAnterior = posicoes[index-8].getCorDoTabuleiro();
-        if(corAnterior == "Branco"){
-            corDoTabuleiro = "Verde";
-        } else{
-            corDoTabuleiro = "Branco";
-        }
-    }
-    return corDoTabuleiro
-  }
 
   return (
     <section className="w-screen h-screen bg-gray-600 flex justify-center items-center flex-col">
       <div className="grid grid-cols-8 grid-rows-8">
-        {posicoes.map((posicao) => (
-          <PosicaoComponent
-            key={posicao.id}
-            posicao={posicao}
-            tabuleiro={tabuleiro}
-          />
-        ))}
+        {posicoes}
       </div>
     </section>
   );

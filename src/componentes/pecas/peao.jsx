@@ -1,13 +1,20 @@
-import { Peca } from "../Peca";
-
-export class Peao extends Peca {
-    constructor(cor) {
-        super(cor)
-        this.primeiroMovimento = true;
-    }
-
-    possiveisMovimentos(tabuleiro,posicaoAtual) {
-        const possiveisMovimentos = [];
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {faChessPawn} from "@fortawesome/free-solid-svg-icons";
+const PeaoComponent = (props) => {
+    const corPeca = {
+        color: props.color === "white" ? "#ffffff" : "#000000"
+    };
+    return(
+        <>
+        <FontAwesomeIcon
+        icon={faChessPawn} 
+        size="xl"
+        style={corPeca}/>  
+        </>
+    );
+    
+    function possiveisMovimentos(tabuleiro,posicaoAtual) {
+        let possiveisMovimentos = [];
         const posicaoNoTabuleiro = tabuleiro.getPosicoes().indexOf(posicaoAtual);
       
         const posicoesTabuleiro = tabuleiro.getPosicoes();
@@ -60,5 +67,5 @@ export class Peao extends Peca {
         }
         return possiveisMovimentos;
       }
-      
 }
+export default PeaoComponent;
