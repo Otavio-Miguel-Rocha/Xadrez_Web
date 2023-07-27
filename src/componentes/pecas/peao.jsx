@@ -1,13 +1,15 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faChessPawn} from "@fortawesome/free-solid-svg-icons";
-const PeaoComponent = (props) => {
+import React from "react";
+
+const PeaoComponent = React.memo((props) => {
     const corPeca = {
         color: props.color === "white" ? "#ffffff" : "#000000"
     };
     return(
         <>
         <FontAwesomeIcon
-        icon={faChessPawn} 
+        icon={faChessPawn}
         size="xl"
         style={corPeca}/>  
         </>
@@ -67,5 +69,5 @@ const PeaoComponent = (props) => {
         }
         return possiveisMovimentos;
       }
-}
+});
 export default PeaoComponent;

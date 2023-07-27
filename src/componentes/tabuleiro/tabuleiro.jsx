@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext, createContext } from "react";
 import PosicaoComponent from "../posicao/posicao";
 
 //Importando as peças
@@ -8,28 +8,28 @@ import CavaloComponent from "../pecas/cavalo";
 import BispoComponent from "../pecas/bispo";
 import RainhaComponent from "../pecas/rainha";
 import ReiComponent from "../pecas/rei";
-import { getPosicoesTabuleiro, setPosicoesTabuleiro } from "../../service/tabuleiro-service";
+
 
 const TabuleiroComponent = () => {
-    if(getPosicoesTabuleiro().length == 0) {
-        const posicoesTabuleiro = Array.from({ length: 64 }, (_, i) => (
+    
+    const [posicoes, setPosicoes] = useState(
+        Array.from({ length: 64 }, (_, i) => (
             <PosicaoComponent 
             key={i} 
-            backgroundColor={corNoTabuleiro(i)
-            
-            }>
+            backgroundColor={corNoTabuleiro(i)}
+            getPosicoesPosicaoComponent={getPosicoes}
+            >
               {posicoesIniciaisDasPecas(i)}
             </PosicaoComponent>
-        ));
-        setPosicoesTabuleiro(posicoesTabuleiro);
+        ))
+    );
+
+    function getPosicoes(){
+        return posicoes;
     }
-
-    const [posicoes, setPosicoes] = useState(getPosicoesTabuleiro());
-
-
   function posicoesIniciaisDasPecas(i){
         if (i >= 8 && i <= 15) {
-            return <PeaoComponent  color={"black"}/>
+            return <PeaoComponent color={"black"}/>
         }
         if (i >= 48 && i <= 55) {
             return <PeaoComponent color={"white"}/>
