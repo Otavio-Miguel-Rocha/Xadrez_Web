@@ -1,7 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChessPawn } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
-import { useEffect } from "react";
 
 const PeaoComponent = React.memo((props) => {
   const corPeca = {
@@ -13,119 +12,144 @@ const PeaoComponent = React.memo((props) => {
       <FontAwesomeIcon
         onClick={possiveisMovimentos}
         icon={faChessPawn}
-        size="xl"
+        size="2xl"
         style={corPeca}
       />
     </>
   );
 
   function possiveisMovimentos() {
-    const peca = props.peca;
     const posicoesTabuleiro = props.posicoesLogicas;
+    console.log(posicoesTabuleiro);
+    let pecaSelecionadaJaExistente = false;
+    posicoesTabuleiro.forEach((posicao) => {
+      if (posicao.selecionado) {
+        pecaSelecionadaJaExistente = true;
+      }
+      posicao.selecionado = false;
+      posicao.possivelMovimento = false;
+    });
+    if (pecaSelecionadaJaExistente) {
+      console.log("peca para atacar");
+    } else {
+      const posicaoPeca = props.posicoesLogicas.indexOf(props.peca);
+      const peca = props.peca;
 
-    let possiveisMovimentos = [];
+      let possiveisMovimentos = [];
 
-    //VERIFICA SE A COR DA PEÇA É PRETA
-    if (peca.cor === "Preto") {
-      //VERIFICA SE NÃO EXISTE ALGO NA FRENTE
-      let pecaUmaCasaAfrente = posicoesTabuleiro[peca.posicaoAtual + 8];
-      if (pecaUmaCasaAfrente.peca == "") {
-        //ADICIONA SE NÃO EXISTIR
-        possiveisMovimentos.push(pecaUmaCasaAfrente);
-        // VERIFICA SE É O PRIMEIRO MOVIMENTO DO PEÃO PRETO
-        if (peca.posicaoAtual >= 8 && peca.posicaoAtual <= 15) {
-          //VERIFICA SE EXISTE ALGO DUAS CASAS PRA FRENTE
-          let pecaDuasCasasAFrente = posicoesTabuleiro[peca.posicaoAtual + 16];
-          if (pecaDuasCasasAFrente.peca == "") {
-            //ADICIONA SE NÃO EXISTIR
-            possiveisMovimentos.push(pecaDuasCasasAFrente);
+      //VERIFICA SE A COR DA PEÇA É PRETA
+      if (peca.cor === "Preto") {
+        //VERIFICA SE NÃO EXISTE ALGO NA FRENTE
+        let pecaUmaCasaAfrente = posicoesTabuleiro[posicaoPeca + 8];
+        if (pecaUmaCasaAfrente.peca == "") {
+          //ADICIONA SE NÃO EXISTIR
+          possiveisMovimentos.push(pecaUmaCasaAfrente);
+          // VERIFICA SE É O PRIMEIRO MOVIMENTO DO PEÃO PRETO
+          if (posicaoPeca >= 8 && posicaoPeca <= 15) {
+            //VERIFICA SE EXISTE ALGO DUAS CASAS PRA FRENTE
+            let pecaDuasCasasAFrente = posicoesTabuleiro[posicaoPeca + 16];
+            if (pecaDuasCasasAFrente.peca == "") {
+              //ADICIONA SE NÃO EXISTIR
+              possiveisMovimentos.push(pecaDuasCasasAFrente);
+            }
           }
         }
-      }
 
-      //DIAGONAIS
-      const pretaPossiveisMovimentosDiagonalDireita = posicoesTabuleiro[peca.posicaoAtual + 9];
-      if (
-        //VERIFICA SE ESTÁ NA EXTREMIDADE DIREITA DO TABULEIRO
-        !validaExtremidade(peca.posicaoAtual + 1)
-      ) {
-        //VERIFICA SE NA DIAGONAL EXISTE UMA PEÇA
-        if (pretaPossiveisMovimentosDiagonalDireita.peca != "") {
-          if (pretaPossiveisMovimentosDiagonalDireita.cor === "Branco"){
+        //DIAGONAIS
+        const pretaPossiveisMovimentosDiagonalDireita =
+          posicoesTabuleiro[posicaoPeca + 9];
+        if (
+          //VERIFICA SE ESTÁ NA EXTREMIDADE DIREITA DO TABULEIRO
+          !validaExtremidade(posicaoPeca + 1)
+        ) {
+          //VERIFICA SE NA DIAGONAL EXISTE UMA PEÇA
+          if (pretaPossiveisMovimentosDiagonalDireita.peca != "") {
+            if (pretaPossiveisMovimentosDiagonalDireita.cor === "Branco") {
+              //ADICIONA A PEÇA ADVERSÁRIA COMO POSSÍVEL MOVIMENTO
+              possiveisMovimentos.push(pretaPossiveisMovimentosDiagonalDireita);
+            }
+          }
+        }
+
+        const pretaPossiveisMovimentosDiagonalEsquerda =
+          posicoesTabuleiro[posicaoPeca + 7];
+        if (
+          //VERIFICA SE ESTÁ NA EXTREMIDADE ESQUERDA DO TABULEIRO
+          !validaExtremidade(posicaoPeca)
+        ) {
+          //VERIFICA SE NA DIAGONAL EXISTE UMA PEÇA
+          if (pretaPossiveisMovimentosDiagonalEsquerda.peca != "") {
             //ADICIONA A PEÇA ADVERSÁRIA COMO POSSÍVEL MOVIMENTO
-            possiveisMovimentos.push(pretaPossiveisMovimentosDiagonalDireita);
+            if (pretaPossiveisMovimentosDiagonalEsquerda.cor === "Branco") {
+              possiveisMovimentos.push(
+                pretaPossiveisMovimentosDiagonalEsquerda
+              );
+            }
           }
         }
       }
+      // COR BRANCA
+      else {
+        //VERIFICA SE NÃO EXISTE ALGO NA FRENTE
+        let pecaUmaCasaAfrente = posicoesTabuleiro[posicaoPeca - 8];
+        if (pecaUmaCasaAfrente.peca == "") {
+          //ADICIONA O MOVIMENTO
+          possiveisMovimentos.push(pecaUmaCasaAfrente);
+          // VERIFICA SE É O PRIMEIRO MOVIMENTO DO PEÃO BRANCO
+          if (posicaoPeca >= 48 && posicaoPeca <= 55) {
+            // SE FOR, VERIFICA SE EXISTE ALGO DUAS CASAS A FRENTE
+            let pecaDuasCasasAFrente = posicoesTabuleiro[posicaoPeca - 16];
+            if (pecaDuasCasasAFrente.peca == "") {
+              //SE NÃO EXISTIR, ADICIONA O POSSÍVEL MOVIMENTO
+              possiveisMovimentos.push(pecaDuasCasasAFrente);
+            }
+          }
+        }
 
-      const pretaPossiveisMovimentosDiagonalEsquerda = posicoesTabuleiro[peca.posicaoAtual + 7];
-      if (
-        //VERIFICA SE ESTÁ NA EXTREMIDADE ESQUERDA DO TABULEIRO
-        !validaExtremidade(peca.posicaoAtual)
-      ) {
-        //VERIFICA SE NA DIAGONAL EXISTE UMA PEÇA
-        if(pretaPossiveisMovimentosDiagonalEsquerda.peca != ""){
-          //ADICIONA A PEÇA ADVERSÁRIA COMO POSSÍVEL MOVIMENTO
-          if (pretaPossiveisMovimentosDiagonalEsquerda.cor === "Branco"){
-          possiveisMovimentos.push(pretaPossiveisMovimentosDiagonalEsquerda);
+        //DIAGONAIS
+        const brancaPossiveisMovimentosDiagonalEsquerda =
+          posicoesTabuleiro[posicaoPeca - 9];
+        if (
+          //VALIDA SE ESTÁ NA EXTREMIDADE ESQUERDA
+          !validaExtremidade(posicaoPeca)
+        ) {
+          // VERIFICA SE EXISTE UMA PEÇA NA DIAGONAL ESQUERDA
+          if (brancaPossiveisMovimentosDiagonalEsquerda.peca != "") {
+            // SE EXISTIR ELA VERIFICA A COR
+            if (brancaPossiveisMovimentosDiagonalEsquerda.cor == "Preto") {
+              // ADICIONA NOS POSSIVEIS MOVIMENTOS CASO SEJA PRETA
+              possiveisMovimentos.push(
+                brancaPossiveisMovimentosDiagonalEsquerda
+              );
+            }
+          }
         }
-      }
-
-    } 
-    // COR BRANCA
-    else {
-      //VERIFICA SE NÃO EXISTE ALGO NA FRENTE
-      let pecaUmaCasaAfrente = posicoesTabuleiro[peca.posicaoAtual - 8];
-      if (pecaUmaCasaAfrente.peca == "") {
-        //ADICIONA O MOVIMENTO
-        possiveisMovimentos.push(pecaUmaCasaAfrente);
-        // VERIFICA SE É O PRIMEIRO MOVIMENTO DO PEÃO BRANCO
-        if (peca.posicaoAtual >= 48 && peca.posicaoAtual <= 55) {
-          // SE FOR, VERIFICA SE EXISTE ALGO DUAS CASAS A FRENTE
-          let pecaDuasCasasAFrente = posicoesTabuleiro[peca.posicaoAtual - 16];
-          if (pecaDuasCasasAFrente.peca == "") {
-            //SE NÃO EXISTIR, ADICIONA O POSSÍVEL MOVIMENTO
-            possiveisMovimentos.push(pecaDuasCasasAFrente);
+        const brancaPossiveisMovimentosDiagonalDireita =
+          posicoesTabuleiro[posicaoPeca - 7];
+        if (
+          //VALIDA SE ESTÁ NA EXTREMIDADE ESQUERDA
+          !validaExtremidade(posicaoPeca + 1)
+        ) {
+          // VERIFICA SE EXISTE UMA PEÇA NA DIAGONAL ESQUERDA
+          if (brancaPossiveisMovimentosDiagonalDireita.peca != "") {
+            // SE EXISTIR ELA VERIFICA A COR
+            if (brancaPossiveisMovimentosDiagonalDireita.cor == "Preto") {
+              // ADICIONA NOS POSSIVEIS MOVIMENTOS CASO SEJA PRETA
+              possiveisMovimentos.push(
+                brancaPossiveisMovimentosDiagonalDireita
+              );
+            }
           }
         }
       }
-
-      //DIAGONAIS
-      const brancaPossiveisMovimentosDiagonalEsquerda = posicoesTabuleiro[peca.posicaoAtual - 9];
-      if (
-        //VALIDA SE ESTÁ NA EXTREMIDADE ESQUERDA
-        !validaExtremidade(peca.posicaoAtual)
-      ) {
-        // VERIFICA SE EXISTE UMA PEÇA NA DIAGONAL ESQUERDA
-        if(brancaPossiveisMovimentosDiagonalEsquerda.peca != ""){
-          // SE EXISTIR ELA VERIFICA A COR
-          if(brancaPossiveisMovimentosDiagonalEsquerda.cor == "Preto"){
-            // ADICIONA NOS POSSIVEIS MOVIMENTOS CASO SEJA PRETA
-            possiveisMovimentos.push(brancaPossiveisMovimentosDiagonalEsquerda);
-          }
-        }
-      }
-      const brancaPossiveisMovimentosDiagonalDireita = posicoesTabuleiro[peca.posicaoAtual - 7];
-      if (
-        //VALIDA SE ESTÁ NA EXTREMIDADE ESQUERDA
-        !validaExtremidade(peca.posicaoAtual+1)
-      ) {
-        // VERIFICA SE EXISTE UMA PEÇA NA DIAGONAL ESQUERDA
-        if(brancaPossiveisMovimentosDiagonalDireita.peca != ""){
-          // SE EXISTIR ELA VERIFICA A COR
-          if(brancaPossiveisMovimentosDiagonalDireita.cor == "Preto"){
-            // ADICIONA NOS POSSIVEIS MOVIMENTOS CASO SEJA PRETA
-            possiveisMovimentos.push(brancaPossiveisMovimentosDiagonalDireita);
-          }
-        }
-      }
-    }
-      if(possiveisMovimentos.length > 0){
-        possiveisMovimentos.forEach(posicao => {
+      //APLICA AS EDIÇÕES NA LISTA ORIGINAL
+      if (possiveisMovimentos.length > 0) {
+        possiveisMovimentos.forEach((posicao) => {
           posicao.possivelMovimento = true;
         });
       }
-      props.setarPosicoes(props.posicoesLogicas.slice())
+      peca.selecionado = true;
+      props.setarPosicoes(props.posicoesLogicas.slice());
     }
   }
   function validaExtremidade(posicaoNoTabuleiro) {
