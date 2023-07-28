@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faChessKing} from "@fortawesome/free-solid-svg-icons";
 const ReiComponent = (props) => {
     const corPeca = {
-        color: props.color === "white" ? "#ffffff" : "#000000"
+        color: props.peca.cor === "Branco" ? "#ffffff" : "#000000"
     };
     return(
         <>

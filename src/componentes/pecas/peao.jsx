@@ -1,73 +1,135 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faChessPawn} from "@fortawesome/free-solid-svg-icons";
+import { faChessPawn } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
+import { useEffect } from "react";
 
 const PeaoComponent = React.memo((props) => {
-    const corPeca = {
-        color: props.color === "white" ? "#ffffff" : "#000000"
-    };
-    return(
-        <>
-        <FontAwesomeIcon
+  const corPeca = {
+    color: props.peca.cor === "Branco" ? "#ffffff" : "#000000",
+  };
+
+  return (
+    <>
+      <FontAwesomeIcon
+        onClick={possiveisMovimentos}
         icon={faChessPawn}
         size="xl"
-        style={corPeca}/>  
-        </>
-    );
-    
-    function possiveisMovimentos(tabuleiro,posicaoAtual) {
-        let possiveisMovimentos = [];
-        const posicaoNoTabuleiro = tabuleiro.getPosicoes().indexOf(posicaoAtual);
-      
-        const posicoesTabuleiro = tabuleiro.getPosicoes();
-        if (this.getCor() === "Preto") {
-          if (!posicoesTabuleiro[posicaoNoTabuleiro + 8].getPeca()) {
-            possiveisMovimentos.push(posicoesTabuleiro[posicaoNoTabuleiro + 8]);
-            if (!posicoesTabuleiro[posicaoNoTabuleiro + 16].getPeca()) {
-              if (this.primeiroMovimento) {
-                possiveisMovimentos.push(posicoesTabuleiro[posicaoNoTabuleiro + 16]);
-              }
-            }
-          }
-          if (
-            posicoesTabuleiro[posicaoNoTabuleiro + 9].getPeca() &&
-            posicoesTabuleiro[posicaoNoTabuleiro + 9].getPeca().getCor() === "Branco" &&
-            !validaExtremidade(posicaoNoTabuleiro + 1)
-          ) {
-            possiveisMovimentos.push(posicoesTabuleiro[posicaoNoTabuleiro + 9]);
-          }
-          if (
-            posicoesTabuleiro[posicaoNoTabuleiro + 7].getPeca() &&
-            posicoesTabuleiro[posicaoNoTabuleiro + 7].getPeca().getCor() === "Branco" &&
-            !validaExtremidade(posicaoNoTabuleiro)
-          ) {
-            possiveisMovimentos.push(posicoesTabuleiro[posicaoNoTabuleiro + 7]);
-          }
-        } else {
-          if (!posicoesTabuleiro[posicaoNoTabuleiro - 8].getPeca()) {
-            possiveisMovimentos.push(posicoesTabuleiro[posicaoNoTabuleiro - 8]);
-            if (this.primeiroMovimento) {
-              if (!posicoesTabuleiro[posicaoNoTabuleiro - 16].getPeca()) {
-                possiveisMovimentos.push(posicoesTabuleiro[posicaoNoTabuleiro - 16]);
-              }
-            }
-          }
-          if (
-            posicoesTabuleiro[posicaoNoTabuleiro - 9].getPeca() &&
-            posicoesTabuleiro[posicaoNoTabuleiro - 9].getPeca().getCor() === "Preto" &&
-            !validaExtremidade(posicaoNoTabuleiro)
-          ) {
-            possiveisMovimentos.push(posicoesTabuleiro[posicaoNoTabuleiro - 9]);
-          }
-          if (
-            posicoesTabuleiro[posicaoNoTabuleiro - 7].getPeca() &&
-            posicoesTabuleiro[posicaoNoTabuleiro - 7].getPeca().getCor() === "Preto" &&
-            !validaExtremidade(posicaoNoTabuleiro + 1)
-          ) {
-            possiveisMovimentos.push(posicoesTabuleiro[posicaoNoTabuleiro - 7]);
+        style={corPeca}
+      />
+    </>
+  );
+
+  function possiveisMovimentos() {
+    const peca = props.peca;
+    const posicoesTabuleiro = props.posicoesLogicas;
+
+    let possiveisMovimentos = [];
+
+    //VERIFICA SE A COR DA PEÇA É PRETA
+    if (peca.cor === "Preto") {
+      //VERIFICA SE NÃO EXISTE ALGO NA FRENTE
+      let pecaUmaCasaAfrente = posicoesTabuleiro[peca.posicaoAtual + 8];
+      if (pecaUmaCasaAfrente.peca == "") {
+        //ADICIONA SE NÃO EXISTIR
+        possiveisMovimentos.push(pecaUmaCasaAfrente);
+        // VERIFICA SE É O PRIMEIRO MOVIMENTO DO PEÃO PRETO
+        if (peca.posicaoAtual >= 8 && peca.posicaoAtual <= 15) {
+          //VERIFICA SE EXISTE ALGO DUAS CASAS PRA FRENTE
+          let pecaDuasCasasAFrente = posicoesTabuleiro[peca.posicaoAtual + 16];
+          if (pecaDuasCasasAFrente.peca == "") {
+            //ADICIONA SE NÃO EXISTIR
+            possiveisMovimentos.push(pecaDuasCasasAFrente);
           }
         }
-        return possiveisMovimentos;
       }
+
+      //DIAGONAIS
+      const pretaPossiveisMovimentosDiagonalDireita = posicoesTabuleiro[peca.posicaoAtual + 9];
+      if (
+        //VERIFICA SE ESTÁ NA EXTREMIDADE DIREITA DO TABULEIRO
+        !validaExtremidade(peca.posicaoAtual + 1)
+      ) {
+        //VERIFICA SE NA DIAGONAL EXISTE UMA PEÇA
+        if (pretaPossiveisMovimentosDiagonalDireita.peca != "") {
+          if (pretaPossiveisMovimentosDiagonalDireita.cor === "Branco"){
+            //ADICIONA A PEÇA ADVERSÁRIA COMO POSSÍVEL MOVIMENTO
+            possiveisMovimentos.push(pretaPossiveisMovimentosDiagonalDireita);
+          }
+        }
+      }
+
+      const pretaPossiveisMovimentosDiagonalEsquerda = posicoesTabuleiro[peca.posicaoAtual + 7];
+      if (
+        //VERIFICA SE ESTÁ NA EXTREMIDADE ESQUERDA DO TABULEIRO
+        !validaExtremidade(peca.posicaoAtual)
+      ) {
+        //VERIFICA SE NA DIAGONAL EXISTE UMA PEÇA
+        if(pretaPossiveisMovimentosDiagonalEsquerda.peca != ""){
+          //ADICIONA A PEÇA ADVERSÁRIA COMO POSSÍVEL MOVIMENTO
+          if (pretaPossiveisMovimentosDiagonalEsquerda.cor === "Branco"){
+          possiveisMovimentos.push(pretaPossiveisMovimentosDiagonalEsquerda);
+        }
+      }
+
+    } 
+    // COR BRANCA
+    else {
+      //VERIFICA SE NÃO EXISTE ALGO NA FRENTE
+      let pecaUmaCasaAfrente = posicoesTabuleiro[peca.posicaoAtual - 8];
+      if (pecaUmaCasaAfrente.peca == "") {
+        //ADICIONA O MOVIMENTO
+        possiveisMovimentos.push(pecaUmaCasaAfrente);
+        // VERIFICA SE É O PRIMEIRO MOVIMENTO DO PEÃO BRANCO
+        if (peca.posicaoAtual >= 48 && peca.posicaoAtual <= 55) {
+          // SE FOR, VERIFICA SE EXISTE ALGO DUAS CASAS A FRENTE
+          let pecaDuasCasasAFrente = posicoesTabuleiro[peca.posicaoAtual - 16];
+          if (pecaDuasCasasAFrente.peca == "") {
+            //SE NÃO EXISTIR, ADICIONA O POSSÍVEL MOVIMENTO
+            possiveisMovimentos.push(pecaDuasCasasAFrente);
+          }
+        }
+      }
+
+      //DIAGONAIS
+      const brancaPossiveisMovimentosDiagonalEsquerda = posicoesTabuleiro[peca.posicaoAtual - 9];
+      if (
+        //VALIDA SE ESTÁ NA EXTREMIDADE ESQUERDA
+        !validaExtremidade(peca.posicaoAtual)
+      ) {
+        // VERIFICA SE EXISTE UMA PEÇA NA DIAGONAL ESQUERDA
+        if(brancaPossiveisMovimentosDiagonalEsquerda.peca != ""){
+          // SE EXISTIR ELA VERIFICA A COR
+          if(brancaPossiveisMovimentosDiagonalEsquerda.cor == "Preto"){
+            // ADICIONA NOS POSSIVEIS MOVIMENTOS CASO SEJA PRETA
+            possiveisMovimentos.push(brancaPossiveisMovimentosDiagonalEsquerda);
+          }
+        }
+      }
+      const brancaPossiveisMovimentosDiagonalDireita = posicoesTabuleiro[peca.posicaoAtual - 7];
+      if (
+        //VALIDA SE ESTÁ NA EXTREMIDADE ESQUERDA
+        !validaExtremidade(peca.posicaoAtual+1)
+      ) {
+        // VERIFICA SE EXISTE UMA PEÇA NA DIAGONAL ESQUERDA
+        if(brancaPossiveisMovimentosDiagonalDireita.peca != ""){
+          // SE EXISTIR ELA VERIFICA A COR
+          if(brancaPossiveisMovimentosDiagonalDireita.cor == "Preto"){
+            // ADICIONA NOS POSSIVEIS MOVIMENTOS CASO SEJA PRETA
+            possiveisMovimentos.push(brancaPossiveisMovimentosDiagonalDireita);
+          }
+        }
+      }
+    }
+      if(possiveisMovimentos.length > 0){
+        possiveisMovimentos.forEach(posicao => {
+          posicao.possivelMovimento = true;
+        });
+      }
+      props.setarPosicoes(props.posicoesLogicas.slice())
+    }
+  }
+  function validaExtremidade(posicaoNoTabuleiro) {
+    return posicaoNoTabuleiro % 8 == 0;
+  }
 });
 export default PeaoComponent;
