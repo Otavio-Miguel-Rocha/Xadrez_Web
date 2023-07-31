@@ -28,10 +28,23 @@ const PosicaoComponent = ((props) => {
 
   function teste(){
     if(corPosicao === "PossivelMovimento"){
-      if(props.children.props.peca){
+      console.log(props.getTabuleiro);
+      let tabuleiro = props.getTabuleiro;
+      let pecaAtacante;
+      tabuleiro.forEach((posicao) => {
+        if(posicao.selecionado){
+          pecaAtacante = posicao;
+        }
+      });
+      if(props.children){
+        pecaAtacante.peca = "";
+        pecaAtacante.cor = "";
+        pecaAtacante.selecionado = false;
+        console.log(pecaAtacante);
         console.log(props.children.props.peca);
+        props.children.props.peca = pecaAtacante;
       } else {
-        
+        console.log(props.getTabuleiro);
       }
     }
   }

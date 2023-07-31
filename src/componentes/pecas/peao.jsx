@@ -20,14 +20,12 @@ const PeaoComponent = React.memo((props) => {
 
   function possiveisMovimentos() {
     const posicoesTabuleiro = props.posicoesLogicas;
-    console.log(posicoesTabuleiro);
-    let pecaSelecionadaJaExistente = false;
+    let pecaSelecionadaJaExistente;
     posicoesTabuleiro.forEach((posicao) => {
       if (posicao.selecionado) {
-        pecaSelecionadaJaExistente = true;
+        pecaSelecionadaJaExistente = posicao;
       }
-      posicao.selecionado = false;
-      posicao.possivelMovimento = false;
+
     });
     if (pecaSelecionadaJaExistente) {
       console.log("peca para atacar");
