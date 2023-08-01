@@ -37,12 +37,9 @@ const PosicaoComponent = ((props) => {
         }
       });
       if(props.children){
-        pecaAtacante.peca = "";
-        pecaAtacante.cor = "";
-        pecaAtacante.selecionado = false;
-        console.log(pecaAtacante);
-        console.log(props.children.props.peca);
-        props.children.props.peca = pecaAtacante;
+        tabuleiro.splice(tabuleiro.indexOf(props.children.props.peca),1);
+        tabuleiro.split();
+        console.log(tabuleiro);
       } else {
         console.log(props.getTabuleiro);
       }
