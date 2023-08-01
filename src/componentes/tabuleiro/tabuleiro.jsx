@@ -229,7 +229,7 @@ const TabuleiroComponent = () => {
         );
       }
     } else {
-      return <PosicaoComponent key={i}getTabuleiro={posicoesLogicas} setTabuleiro={setPosicoesLogicas} backgroundColor={corNoTabuleiro(i,posicao)} />;
+      return <PosicaoComponent key={i} posicaoVazia={i} getTabuleiro={posicoesLogicas} setTabuleiro={setPosicoesLogicas} backgroundColor={corNoTabuleiro(i,posicao)} />;
     }
     //
   }

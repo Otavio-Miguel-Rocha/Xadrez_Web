@@ -28,7 +28,6 @@ const PosicaoComponent = ((props) => {
 
   function teste(){
     if(corPosicao === "PossivelMovimento"){
-      console.log(props.getTabuleiro);
       let tabuleiro = props.getTabuleiro;
       let pecaAtacante;
       tabuleiro.forEach((posicao) => {
@@ -36,13 +35,20 @@ const PosicaoComponent = ((props) => {
           pecaAtacante = posicao;
         }
       });
+      let pecaAtacanteIndex = tabuleiro.indexOf(pecaAtacante);
       if(props.children){
-        tabuleiro.splice(tabuleiro.indexOf(props.children.props.peca),1);
-        tabuleiro.split();
-        console.log(tabuleiro);
+        tabuleiro.splice(tabuleiro.indexOf(props.children.props.peca),1, pecaAtacante);
       } else {
-        console.log(props.getTabuleiro);
+
+        let posicaoVazia = tabuleiro[props.posicaoVazia];
+        tabuleiro.splice(tabuleiro.indexOf(posicaoVazia),1, pecaAtacante);
       }
+      tabuleiro.splice(pecaAtacanteIndex,1 , {peca: "", cor: "", selecionado: false, possivelMovimento: false});
+      tabuleiro.forEach((peca) => {
+        peca.selecionado = false;
+        peca.possivelMovimento = false;
+      });
+      props.setTabuleiro(tabuleiro.slice());
     }
   }
 });
