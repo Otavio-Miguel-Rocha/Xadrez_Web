@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const PosicaoComponent = ((props) => {
+export const PosicaoComponent = ((props) => {
   const corPosicao = props.backgroundColor;
   const [backgroundColor, setBackgroundColor] = useState(definirCorDeFundo());
 
@@ -18,7 +18,7 @@ const PosicaoComponent = ((props) => {
     <a
       onMouseOver={() => setBackgroundColor("gray")}
       onMouseOut={() => setBackgroundColor(definirCorDeFundo())}
-      onClick={() => teste()}
+      onClick={() => movimentar()}
       className="w-10 h-10 flex justify-center items-center cursor-pointer"
       style={{backgroundColor}}
     >
@@ -26,7 +26,7 @@ const PosicaoComponent = ((props) => {
     </a>
   );
 
-  function teste(){
+  function movimentar(){
     if(corPosicao === "PossivelMovimento"){
       let tabuleiro = props.getTabuleiro;
       let pecaAtacante;
@@ -52,5 +52,3 @@ const PosicaoComponent = ((props) => {
     }
   }
 });
-
-export default PosicaoComponent;

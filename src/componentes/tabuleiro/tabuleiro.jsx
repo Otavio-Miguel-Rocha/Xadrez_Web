@@ -1,15 +1,15 @@
-import { useState, useEffect, useContext, createContext } from "react";
-import PosicaoComponent from "../posicao/posicao";
+import { useState, useEffect } from "react";
+import {PosicaoComponent} from "../posicao/posicao";
 
 //Importando as peças
-import PeaoComponent from "../pecas/peao";
-import TorreComponent from "../pecas/torre";
-import CavaloComponent from "../pecas/cavalo";
-import BispoComponent from "../pecas/bispo";
-import RainhaComponent from "../pecas/rainha";
-import ReiComponent from "../pecas/rei";
+import {PeaoComponent} from "../pecas/peao";
+import {TorreComponent} from "../pecas/torre";
+import {CavaloComponent} from "../pecas/cavalo";
+import {BispoComponent} from "../pecas/bispo";
+import {RainhaComponent} from "../pecas/rainha";
+import {ReiComponent} from "../pecas/rei";
 
-const tabuleiro = [
+export const tabuleiro = [
   { peca: "Torre", cor: "Preto", selecionado: false , possivelMovimento: false },
   { peca: "Cavalo", cor: "Preto", selecionado: false , possivelMovimento: false },
   { peca: "Bispo", cor: "Preto",selecionado: false , possivelMovimento: false },
@@ -76,7 +76,7 @@ const tabuleiro = [
   { peca: "Torre", cor: "Branco",selecionado: false , possivelMovimento: false },
 ];
 
-const TabuleiroComponent = () => {
+export const TabuleiroComponent = () => {
   const [posicoesLogicas, setPosicoesLogicas] = useState(tabuleiro);
   const [posicoesVisuais, setPosicoesVisuais] = useState(percorreListaPosicoesVisuais());
 
@@ -257,5 +257,3 @@ const TabuleiroComponent = () => {
     </section>
   );
 };
-
-export default TabuleiroComponent;

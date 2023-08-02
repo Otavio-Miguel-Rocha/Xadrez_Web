@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faChessKnight} from "@fortawesome/free-solid-svg-icons";
-const CavaloComponent = (props) => {
+export const CavaloComponent = (props) => {
     const corPeca = {
         color: props.peca.cor === "Branco" ? "#ffffff" : "#000000"
     };
@@ -8,9 +8,8 @@ const CavaloComponent = (props) => {
         <>
         <FontAwesomeIcon 
         icon={faChessKnight} 
-        size="xl"
+        size="2xl"
         style={corPeca}/>  
         </>
     );
 }
-export default CavaloComponent;

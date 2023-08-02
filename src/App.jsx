@@ -1,4 +1,4 @@
-import TabuleiroComponent from "./componentes/tabuleiro/tabuleiro"
+import {TabuleiroComponent} from "./componentes/tabuleiro/tabuleiro"
 function App() {
   return (
     <>
