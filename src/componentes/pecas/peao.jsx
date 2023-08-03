@@ -10,7 +10,7 @@ export const PeaoComponent = React.memo((props) => {
   return (
     <>
       <FontAwesomeIcon
-        onClick={possiveisMovimentos}
+        onClick={selecionar}
         icon={faChessPawn}
         size="2xl"
         style={corPeca}
@@ -18,19 +18,25 @@ export const PeaoComponent = React.memo((props) => {
     </>
   );
 
-  function possiveisMovimentos() {
-    const posicoesTabuleiro = props.posicoesLogicas;
-    let pecaSelecionadaJaExistente;
-    posicoesTabuleiro.forEach((posicao) => {
-      if (posicao.selecionado) {
-        pecaSelecionadaJaExistente = posicao;
+  function selecionar(){
+    if(!props.peca.possivelMovimento){
+      if (props.peca.cor == "Branco") {
+        props.posicoesLogicas.forEach((peca) => {
+          peca.possivelMovimento = false;
+          peca.selecionado = false;
+        });
+        props.peca.selecionado = true;
+        console.log(props.peca);
+        possiveisMovimentos();
+      } else {
+        console.log("preta");
       }
+    }
+  }
 
-    });
-    if (pecaSelecionadaJaExistente) {
-      console.log("peca para atacar");
-    } else {
-      const posicaoPeca = props.posicoesLogicas.indexOf(props.peca);
+  function possiveisMovimentos() {
+     const posicoesTabuleiro = props.posicoesLogicas
+      const posicaoPeca = posicoesTabuleiro.indexOf(props.peca);
       const peca = props.peca;
 
       let possiveisMovimentos = [];
@@ -146,10 +152,10 @@ export const PeaoComponent = React.memo((props) => {
           posicao.possivelMovimento = true;
         });
       }
-      peca.selecionado = true;
+      console.log(props);
       props.setarPosicoes(props.posicoesLogicas.slice());
     }
-  }
+  
   function validaExtremidade(posicaoNoTabuleiro) {
     return posicaoNoTabuleiro % 8 == 0;
   }

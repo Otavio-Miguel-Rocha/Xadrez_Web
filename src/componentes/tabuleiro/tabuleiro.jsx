@@ -8,6 +8,7 @@ import {CavaloComponent} from "../pecas/cavalo";
 import {BispoComponent} from "../pecas/bispo";
 import {RainhaComponent} from "../pecas/rainha";
 import {ReiComponent} from "../pecas/rei";
+import { JogadorDaVezComponent } from "../jogadorDaVez/jogadorDaVez";
 
 export const tabuleiro = [
   { peca: "Torre", cor: "Preto", selecionado: false , possivelMovimento: false },
@@ -115,6 +116,7 @@ export const TabuleiroComponent = () => {
             <PeaoComponent
               peca={posicao}
               posicoesLogicas={posicoesLogicas}
+              setarPosicoes={setPosicoesLogicas}
             />
           </PosicaoComponent>
         );
@@ -127,6 +129,7 @@ export const TabuleiroComponent = () => {
             <TorreComponent
               peca={posicao}
               posicoesLogicas={posicoesLogicas}
+              setarPosicoes={setPosicoesLogicas}
             />
           </PosicaoComponent>
         );
@@ -138,6 +141,7 @@ export const TabuleiroComponent = () => {
             <TorreComponent
               peca={posicao}
               posicoesLogicas={posicoesLogicas}
+              setarPosicoes={setPosicoesLogicas}
             />
           </PosicaoComponent>
         );
@@ -150,6 +154,7 @@ export const TabuleiroComponent = () => {
             <CavaloComponent
               peca={posicao}
               posicoesLogicas={posicoesLogicas}
+              setarPosicoes={setPosicoesLogicas}
             />
           </PosicaoComponent>
         );
@@ -161,6 +166,7 @@ export const TabuleiroComponent = () => {
             <CavaloComponent
               peca={posicao}
               posicoesLogicas={posicoesLogicas}
+              setarPosicoes={setPosicoesLogicas}
             />
           </PosicaoComponent>
         );
@@ -173,6 +179,7 @@ export const TabuleiroComponent = () => {
             <BispoComponent
               peca={posicao}
               posicoesLogicas={posicoesLogicas}
+              setarPosicoes={setPosicoesLogicas}
             />
           </PosicaoComponent>
         );
@@ -184,6 +191,7 @@ export const TabuleiroComponent = () => {
             <BispoComponent
               peca={posicao}
               posicoesLogicas={posicoesLogicas}
+              setarPosicoes={setPosicoesLogicas}
             />
           </PosicaoComponent>
         );
@@ -196,6 +204,7 @@ export const TabuleiroComponent = () => {
             <RainhaComponent
               peca={posicao}
               posicoesLogicas={posicoesLogicas}
+              setarPosicoes={setPosicoesLogicas}
             />
           </PosicaoComponent>
         );
@@ -207,6 +216,7 @@ export const TabuleiroComponent = () => {
             <RainhaComponent
               peca={posicao}
               posicoesLogicas={posicoesLogicas}
+              setarPosicoes={setPosicoesLogicas}
             />
           </PosicaoComponent>
         );
@@ -216,7 +226,7 @@ export const TabuleiroComponent = () => {
       if (nomePeca == "Rei" && corDaPeca == "Preto") {
         return (
           <PosicaoComponent key={i}getTabuleiro={posicoesLogicas} setTabuleiro={setPosicoesLogicas} backgroundColor={corNoTabuleiro(i,posicao)}>
-            <ReiComponent peca={posicao} posicoesLogicas={posicoesLogicas}/>
+            <ReiComponent peca={posicao} posicoesLogicas={posicoesLogicas} setarPosicoes={setPosicoesLogicas}/>
           </PosicaoComponent>
         );
       }
@@ -224,7 +234,7 @@ export const TabuleiroComponent = () => {
       if (nomePeca == "Rei" && corDaPeca == "Branco") {
         return (
           <PosicaoComponent key={i}getTabuleiro={posicoesLogicas} setTabuleiro={setPosicoesLogicas} backgroundColor={corNoTabuleiro(i,posicao)}>
-            <ReiComponent peca={posicao} posicoesLogicas={posicoesLogicas}/>
+            <ReiComponent peca={posicao} posicoesLogicas={posicoesLogicas} setarPosicoes={setPosicoesLogicas}/>
           </PosicaoComponent>
         );
       }
@@ -254,6 +264,7 @@ export const TabuleiroComponent = () => {
   return (
     <section className="w-screen h-screen bg-gray-600 flex justify-center items-center flex-col">
       <div className="grid grid-cols-8 grid-rows-8">{posicoesVisuais}</div>
+      <JogadorDaVezComponent/>
     </section>
   );
 };
